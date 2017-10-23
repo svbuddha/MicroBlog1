@@ -1,0 +1,39 @@
+public class Post
+{
+    private static int nextPostNumber = 1;
+    private int postNumber;
+    private User author;
+    private String post;
+    private String webAddress;
+
+    public Post (User author, String post, String webAddress)
+    {
+        this.postNumber = nextPostNumber;
+        nextPostNumber++;
+        this.author = author;
+        this.post = post;
+        this.webAddress = webAddress;
+    }
+
+    public int getPostNumber()
+    {
+        return postNumber;
+    }
+
+    public String getAuthorUserName()
+    {
+        User currentAuthor = (User)author;
+        String authorUserName = currentAuthor.getUserName();
+        return authorUserName;
+    }
+
+    public String getPost()
+    {
+        return post;
+    }
+
+    public String getWebAddress()
+    {
+        return webAddress;
+    }
+}
