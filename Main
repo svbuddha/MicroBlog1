@@ -213,7 +213,7 @@ public class Microblog2
             {
                 System.out.println ("Web address: " + posts.getWebAddress());
             }
-            System.out.println(posts.getBlog());
+            System.out.println(posts.getPost());
             System.out.println();
         }
     }
