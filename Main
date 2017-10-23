@@ -1,0 +1,237 @@
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Microblog2
+{
+    static Scanner keyboard = new Scanner(System.in);
+    private User currentUser; 
+    private ArrayList allUsers; 
+    private ArrayList allPosts; 
+    private Post currentPost; 
+
+    public void startBlog()
+    {  
+        allUsers = new ArrayList();
+        int menuSelect = 0; 
+        int userChoice = 0;
+        allPosts = new ArrayList();
+        System.out.println("Welcome to Microblog2");
+        
+        while (menuSelect != 9)
+        {
+            System.out.println();
+            displayMenu();
+            menuSelect = readMenuEntry();
+            if (menuSelect == 1)
+            {
+                currentUser = obtainNewUserInfo();
+                allUsers.add(currentUser);
+            }
+            else if (currentUser == null && menuSelect != 9)
+            {
+                System.out.println ("You must create a user before performing this function.");
+                currentUser = obtainNewUserInfo();
+                allUsers.add(currentUser);
+            }
+            else if (menuSelect == 2)
+            {
+                displayListOfUsers();
+                userChoice = readUserChoiceEntry();
+                if (userChoice == 9)
+                {
+                    menuSelect = userChoice;
+                }
+                else
+                {
+                    currentUser = (User) allUsers.get (userChoice - 1);
+                    System.out.println ("The user you chose is " + currentUser.getUserName());
+                }
+            }
+            else if (menuSelect == 3)
+            {
+                if (currentUser.getPostArraySize() == 0)
+                {
+                    System.out.print("This is your first blog. ");
+                }
+                else
+                {
+                    System.out.println("Your last post was:");
+                    System.out.println(currentUser.getLastUserBlog());
+                    System.out.println();
+                }
+                currentPost = obtainPost();
+                allPosts.add(currentPost);
+                currentUser.addUserPost(currentPost);
+            }
+            else if (menuSelect == 4)
+            {
+                if (allPosts.size() == 0)
+                {
+                    System.out.println("There are currently no posts.");
+                    System.out.println();
+                }
+                else
+                {
+                    printAllPosts();
+                }
+            }
+            else if (menuSelect == 5)
+            {
+                if (allUsers.size() == 0)
+                {
+                    System.out.println ("There are currently no users.");
+                    System.out.println();
+                }
+                else
+                {
+                    printAllUsers();
+                }
+            }
+            else if (menuSelect != 9)
+            {
+                System.out.println ("You must choose a valid number from the following: 1,2,3,4,5 or 9");
+            }
+        }
+        System.out.println("Exit");
+    }
+
+    public static void main (String [] args)
+    {
+        Microblog2 me = new Microblog2();
+        me.startBlog();
+    }
+
+    public static void displayMenu ()
+    {
+        System.out.println("Main Menu");
+        System.out.println("");
+        System.out.println ("1. Create a new user");
+        System.out.println ("2. Become an existing user");
+        System.out.println ("3. Create a post as the current user");
+        System.out.println ("4. Print all posts");
+        System.out.println ("5. Print all users");
+        System.out.println ("9. Exit");
+        return;
+    }
+
+    public int readMenuEntry()
+    {
+        if (currentUser == null)
+        {
+            System.out.println ("You are the first user. What would you like to do?");
+        }
+        else
+        {
+            System.out.println ("You are currently user " + currentUser.getUserName() + ".  What would you like to do?");
+        }
+        System.out.print (": ");
+        int entry = keyboard.nextInt();
+        keyboard.skip ("\n");
+        System.out.println();
+        return entry;
+    }
+    
+    public User obtainNewUserInfo()
+    {
+        System.out.print ("Please enter a user name: ");
+        String name = keyboard.nextLine();
+        System.out.println("");
+        System.out.print("Provide the url for the Avatar: ");
+        String avatarurl = keyboard.nextLine();
+        System.out.println("");
+        System.out.print("Enter your Full Name: ");
+        String fullname = keyboard.nextLine();
+        System.out.println("");
+        System.out.print("Enter your email address: ");
+        String emailaddress = keyboard.nextLine();
+
+        User tempblogger = new User(name, fullname, emailaddress, avatarurl);
+        return tempblogger;
+    }
+
+
+    public void displayListOfUsers()
+    {
+        int sizeUserArray = allUsers.size();
+        Iterator iterators = allUsers.iterator();
+        while (iterators.hasNext())
+        {
+            User users = (User)iterators.next();
+            System.out.println (users.getUserNumber() + ") " + users.getUserName());
+        }
+    }
+
+    public int readUserChoiceEntry()
+    {
+        int whichUser;
+        do
+        {
+            System.out.println ("Choose number corresponding to user you would like to be.");
+            System.out.print (":  ");
+            whichUser = keyboard.nextInt();
+            keyboard.skip ("\n");
+            System.out.println();
+        }while ((whichUser <= 0) || (whichUser > allUsers.size()) && (whichUser != 9));
+        return whichUser;
+    }
+
+    public Post createPost()
+    {
+        System.out.println("What would you like to post?");
+        String bloggermsg = keyboard.nextLine();
+        
+        System.out.print("Web address: ");
+        String blogwebaddress = keyboard.nextLine();
+        Post tempblog = new Post(currentUser, bloggermsg, blogwebaddress);
+        return tempblog;
+
+    }
+
+    public Post obtainPost()
+    {
+        System.out.println ("Enter your message here.");
+        String bloggerMsg = keyboard.nextLine();
+
+        System.out.print("Web address: ");
+        String blogWebAddress = keyboard.nextLine();
+
+        Post tempBlog = new Post(currentUser, bloggerMsg, blogWebAddress);
+        return tempBlog;
+
+    }
+
+    public void printAllPosts()
+    {
+        Iterator iter = allPosts.iterator();
+        while (iter.hasNext())
+        {
+            Post posts = (Post) iter.next();
+            System.out.println("Post " + posts.getPostNumber() + ", By: " + posts.getAuthorUserName());
+            if (!"".equals (posts.getWebAddress()))
+            {
+                System.out.println ("Web address: " + posts.getWebAddress());
+            }
+            System.out.println(posts.getBlog());
+            System.out.println();
+        }
+    }
+
+    public void printAllUsers()
+    {
+        Iterator iterators = allUsers.iterator();
+        while (iterators.hasNext())
+        {
+            User users = (User)iterators.next();
+            System.out.println("User Number: " + users.getUserNumber());
+            System.out.println("User Name: " + users.getUserName());
+            System.out.println ("Full Name: "  + users.getFullName());
+            System.out.println ("Email Address: " + users.getEmailAddress());
+            System.out.println ("Avatar Url: " + users.getAvatarUrl());
+            System.out.println();
+        }
+
+    }
+}
+
