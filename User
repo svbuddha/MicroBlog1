@@ -1,0 +1,68 @@
+import java.util.ArrayList;
+
+public class User
+{
+    private static int nextUserNumber = 1;
+    private int userNumber; 
+    private String userName;
+    private String fullName;
+    private String emailAddress;
+    private String avatarUrl;
+
+    private ArrayList userPosts;
+
+    public User(String userName, String fullName, String emailAddress, String avatarUrl)
+    {
+        this.userNumber = nextUserNumber;
+        nextUserNumber++;
+        this.userName = userName;
+        this.fullName = fullName;
+        this.emailAddress = emailAddress;
+        this.avatarUrl = avatarUrl;
+        userPosts = new ArrayList();
+    }
+
+    public String getUserName()
+    {
+        return userName;
+    }
+
+    public int getUserNumber()
+    {
+        return userNumber;
+    }
+
+    public String getFullName()
+    {
+        return fullName;
+    }
+
+    public String getEmailAddress()
+    {
+        return emailAddress;
+    }
+
+    public String getAvatarUrl()
+    {
+        return avatarUrl;
+    }
+
+    public void addUserPost (Post newBlog)
+    {
+        userPosts.add(newBlog);
+    }
+
+    public int getPostArraySize()
+    {
+        return userPosts.size();
+    }
+
+    public String getLastUserBlog()
+    {
+        int userNumOfPosts = this.getPostArraySize();
+        //to find position in array,subtract 1 since posts start at 1, but array starts at 0
+        int PosOfLastPost = userNumOfPosts - 1;
+        Post lastPost = (Post)userPosts.get(PosOfLastPost);
+        return lastPost.getPost();
+    }
+   }
