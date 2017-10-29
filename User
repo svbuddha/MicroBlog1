@@ -60,7 +60,6 @@ public class User
     public String getLastUserBlog()
     {
         int userNumOfPosts = this.getPostArraySize();
-        //to find position in array,subtract 1 since posts start at 1, but array starts at 0
         int PosOfLastPost = userNumOfPosts - 1;
         Post lastPost = (Post)userPosts.get(PosOfLastPost);
         return lastPost.getPost();
